@@ -21,12 +21,19 @@ angular.module 'app', [
 
   $compileProvider.debugInfoEnabled true
 
-.directive 'ptDetail', ->
-  restrict: 'E'
-  templateUrl: 'webchimera.html'
-  controller: 'detailCtrl as chimera'
+  $mdThemingProvider
+    .theme 'default'
+    .primaryPalette 'indigo'
+    .accentPalette 'blue'
 
-.controller 'detailCtrl', ($scope, playerConfig) ->
+  return 
+
+.directive 'appPlayer', ->
+  restrict: 'E'
+  templateUrl: 'partials/player.html'
+  controller: 'playerCtrl as chimera'
+
+.controller 'playerCtrl', ($scope, playerConfig) ->
   vm = this
 
   vm.config = playerConfig.config
@@ -35,3 +42,15 @@ angular.module 'app', [
     vm.config.controls = readyState
 
   return
+
+.directive 'appToolbar', ->
+  restrict: 'E'
+  templateUrl: 'partials/toolbar.html'
+  #controller: 'ToolbarCtrl as toolbar'
+
+.directive 'appContainer', ->
+  restrict: 'E'
+  templateUrl: 'partials/container.html'
+  #controller: 'BrowserCtrl as browser'
+
+.constant 'ipc', require 'ipc'

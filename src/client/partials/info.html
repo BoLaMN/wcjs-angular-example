@@ -1,0 +1,57 @@
+<div ng-init="movie = card" class="movieInfo" >
+  <span class="icon-close close"></span>
+  <div class="header" layout="row" layout-wrap>
+  	<h2 flex="66">{{movie.Title}}</h2>
+    <h2 flex="33" class="text-right"><small>{{formatDate(movie.Released)}}</small></h2>
+</div>
+  <div class="body">
+  	<div layout="row" layout-wrap>
+	  	<div flex="20">
+        <div class="progress-wrapper">
+          <div class="progress">{{movie.imdbRating}}</div>
+          <div
+                  round-progress
+                  max="10"
+                  current="movie.imdbRating"
+                  color="{{ ratedColor(movie.imdbRating) }}"
+                  bgcolor="{{ configRoundRate.bgColor }}"
+                  radius="{{ configRoundRate.radius }}"
+                  semi="configRoundRate.isSemi"
+                  rounded="configRoundRate.rounded"
+                  clockwise="configRoundRate.clockwise"
+                  stroke="{{ configRoundRate.stroke }}"
+                  animation="{{ configRoundRate.currentAnimation }}"></div>
+        </div>
+      </div>
+      <div ng-init="knb = movie.imdbVotes.split(',');" class="stat-picto" flex="20">
+        <div class="text-center">
+          <i class="icon-bars"></i><br>
+          {{movie.imdbVotes}}
+        </div>
+      </div>
+      <div flex="20" class="duration stat-picto">
+        <div class="text-center">
+          <i class="icon-clock"></i><br>
+          {{movie.Runtime}}
+        </div>
+      </div>
+      <ul flex="40" class="list-genre" ng-init="genres = movie.Genre.split(',');">
+        
+          <li class="label" ng-repeat="genre in genres">{{genre}}</li>
+  
+      </ul>
+	  	<div flex="100" class="plot">
+	  		<p>{{movie.Plot}}</p>
+	  	</div>
+	  	<div flex="100" class="stars">
+	  		<p><b>Stars : </b>{{movie.Actors}}</p>
+	  	</div>
+  	</div>
+  	
+  </div>
+  <div class="footer" layout="row">
+    <md-button ng-click="moreInfo(movie)" class="md-raised md-primary"><i class="icon-link"></i> IMDB Details</md-button>
+    <md-button ng-click="playMovie(movie)" class="md-raised md-primary"><i class="icon-play3"></i> Play</md-button>
+  </div>
+  
+</div>

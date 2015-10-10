@@ -1,0 +1,30 @@
+<md-content flex layout="column" style="background-color: #fbfbfb;">
+
+  <div layout="row" layout-sm="column" layout-align="space-around" ng-if="!browser.data">
+    <md-progress-circular value="{{browser.determinateValue}}" md-mode="determinate"></md-progress-circular>
+  </div>
+  
+  <section class="dropzone-outter"></section>
+
+  <div class="dropzone-inner">
+    <md-icon md-font-set="material-icons">cloud_upload</md-icon>
+    <h3>Drop files and folders here</h3>
+    <div class="text-below">Or use one of the buttons above.</div>
+  </div>
+
+  <md-content layout-padding ng-show="browser.data">
+    <md-grid-list md-row-height="4:3" md-cols-sm="2" md-cols-gt-sm="3" md-cols-md="4" md-cols-gt-md="5" md-cols-lg="6" md-cols-gt-lg="8" md-gutter-sm="8px" md-gutter-md="12px" md-gutter-lg="16px" md-gutter-gt-lg="16px">
+
+      <md-grid-tile md-rowspan="2" ng-repeat="item in browser.data track by item._id" ng-click="browser.playItem(item)">
+        <div style="display: inline-block; height: 100%; width: 100%">
+          <img ng-src="item.poster" width="100%"/>
+          <div class="info">
+            <h3 class="item-title">{{ item.title }}</h3>
+          </div>
+        </div>
+      </md-grid-tile>
+
+    </md-grid-list>
+
+  </md-content>
+</md-content>

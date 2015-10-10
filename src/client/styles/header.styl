@@ -1,0 +1,92 @@
+app-header
+    z-index 10
+    display block
+    font-family 'Roboto', sans-serif
+    -webkit-app-region drag
+    width 100vw
+    height 35px
+    outline none
+    position fixed
+    
+    span
+        z-index 10
+        text-align center
+        position fixed
+        width 100vw
+        margin-top 10px
+        color aliceblue
+        opacity 0.9
+        font-size 16px
+        font-weight 500
+    
+    .os-controls
+        -webkit-app-region no-drag
+        margin-top 11px
+        z-index 11
+        position absolute
+        
+        div
+            cursor pointer
+            color #ffffff
+    
+    .os-controls.darwin, .os-controls.win32
+        margin-left 13px
+        left 0
+        
+        div
+            margin-right 8px
+            border-radius 20px
+            opacity 1
+            height 12px
+            width 12px
+            float left
+            background-image url(../images/icons/topbar_sprite.png)
+            background-size auto 12px
+            background-position -9999px center
+            background-repeat no-repeat
+
+        .max
+            background-color #2ED147
+            
+            &:hover
+                background-position -52px center
+        
+        .min
+            background-color #FCBC42
+            
+            &:hover
+                background-position -39px center
+        
+        .close
+            background-color #FB605B
+            
+            &:hover
+                background-position -65px center
+
+.dropzone-outter, .dropzone-inner 
+    position: absolute
+    top: calc(50% - 200px)
+    left: calc(50% - 200px)
+    width: 400px
+    height: 400px 
+    border-radius: 50%
+    background-color: #fff
+    border: 1px solid #dce6f1
+
+.dropzone-inner 
+    flex-direction: column
+    text-align: center
+    justify-content: center
+    color: #94a7b1
+
+    h3 
+        margin: 0 0 7px
+
+    md-icon 
+        font-size: 200px
+        line-height: 1
+        height: 200px
+        width: 200px
+        padding-top: 10%
+        padding-bottom: 5%
+        color: #94a7b1

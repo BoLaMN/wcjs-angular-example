@@ -1,0 +1,102 @@
+app-header {
+  z-index: 10;
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  -webkit-app-region: drag;
+  width: 100vw;
+  height: 35px;
+  outline: none;
+  position: fixed;
+}
+app-header span {
+  z-index: 10;
+  text-align: center;
+  position: fixed;
+  width: 100vw;
+  margin-top: 10px;
+  color: #f0f8ff;
+  opacity: 0.9;
+  font-size: 16px;
+  font-weight: 500;
+}
+app-header .os-controls {
+  -webkit-app-region: no-drag;
+  margin-top: 11px;
+  z-index: 11;
+  position: absolute;
+}
+app-header .os-controls div {
+  cursor: pointer;
+  color: #fff;
+}
+app-header .os-controls.darwin,
+app-header .os-controls.win32 {
+  margin-left: 13px;
+  left: 0;
+}
+app-header .os-controls.darwin div,
+app-header .os-controls.win32 div {
+  margin-right: 8px;
+  border-radius: 20px;
+  opacity: 1;
+  height: 12px;
+  width: 12px;
+  float: left;
+  background-image: url("../images/icons/topbar_sprite.png");
+  background-size: auto 12px;
+  background-position: -9999px center;
+  background-repeat: no-repeat;
+}
+app-header .os-controls.darwin .max,
+app-header .os-controls.win32 .max {
+  background-color: #2ed147;
+}
+app-header .os-controls.darwin .max:hover,
+app-header .os-controls.win32 .max:hover {
+  background-position: -52px center;
+}
+app-header .os-controls.darwin .min,
+app-header .os-controls.win32 .min {
+  background-color: #fcbc42;
+}
+app-header .os-controls.darwin .min:hover,
+app-header .os-controls.win32 .min:hover {
+  background-position: -39px center;
+}
+app-header .os-controls.darwin .close,
+app-header .os-controls.win32 .close {
+  background-color: #fb605b;
+}
+app-header .os-controls.darwin .close:hover,
+app-header .os-controls.win32 .close:hover {
+  background-position: -65px center;
+}
+.dropzone-outter,
+.dropzone-inner {
+  position: absolute;
+  top: calc(50% - 200px);
+  left: calc(50% - 200px);
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 1px solid #dce6f1;
+}
+.dropzone-inner {
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  color: #94a7b1;
+}
+.dropzone-inner h3 {
+  margin: 0 0 7px;
+}
+.dropzone-inner md-icon {
+  font-size: 200px;
+  line-height: 1;
+  height: 200px;
+  width: 200px;
+  padding-top: 10%;
+  padding-bottom: 5%;
+  color: #94a7b1;
+}

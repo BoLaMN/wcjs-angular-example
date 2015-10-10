@@ -1,0 +1,19 @@
+<md-toolbar style="min-height: 90px;">
+    <span class="flex"></span>
+    
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+      <md-button class="md-icon-button" ng-click="toggleSidenav()" hide-gt-md aria-label="{{ toolbar.title }}">
+        <md-icon md-font-set="material-icons">menu</md-icon>
+      </md-button>
+
+      <h3>{{ toolbar.title }}</h3>
+
+      <span flex></span>
+      
+      <md-search-autocomplete text-change="browser.searchTextChange(searchText)" text="searchText"></md-search-autocomplete>
+
+      <md-button class="md-icon-button">
+        <md-icon md-font-set="material-icons">more_vert</md-icon>
+      </md-button>
+    </div>
+</md-toolbar>
