@@ -1,6 +1,6 @@
-shell = require 'shell'
+shell  = require 'shell'
 window = require 'browser-window'
-ipc      = require 'ipc'
+ipc    = require 'ipc'
 
 { EventEmitter } = require 'events'
 
@@ -51,6 +51,9 @@ class AppWindow extends EventEmitter
     ipc.on 'open-url-in-external', (event, url) ->
       shell.openExternal url
       return
+
+    ipc.on 'userdir', (evt, arg) =>
+      evt.returnValue = require('app').getPath 'home'
 
     ipc.on 'focus', =>
       @window.focus()

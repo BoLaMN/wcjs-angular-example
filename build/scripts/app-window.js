@@ -63,6 +63,11 @@
       ipc.on('open-url-in-external', function(event, url) {
         shell.openExternal(url);
       });
+      ipc.on('userdir', (function(_this) {
+        return function(evt, arg) {
+          return evt.returnValue = require('app').getPath('home');
+        };
+      })(this));
       ipc.on('focus', (function(_this) {
         return function() {
           _this.window.focus();

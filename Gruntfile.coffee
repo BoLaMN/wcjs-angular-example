@@ -61,7 +61,7 @@ module.exports = (grunt) ->
 
     # https://www.npmjs.com/package/grunt-angular-templates
     ngtemplates:
-      app: 
+      ng: 
         cwd: 'src/client/'
         src: ['**/*.html']
         dest: 'build/js/templates.js'

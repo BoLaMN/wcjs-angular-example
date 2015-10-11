@@ -1,10 +1,10 @@
-angular.module('app').run(['$templateCache', function($templateCache) {
+angular.module('ng').run(['$templateCache', function($templateCache) {
   'use strict';
 
   $templateCache.put('partials/container.html',
-    "<md-content flex layout=\"column\" style=\"background-color: #fbfbfb;\">\n" +
+    "<md-content flex layout=\"column\" style=\"overflow-y: hidden\">\n" +
     "\n" +
-    "  <div layout=\"row\" layout-sm=\"column\" layout-align=\"space-around\" ng-if=\"!browser.data\">\n" +
+    "  <div layout=\"row\" layout-align=\"space-around\" ng-if=\"!files.folders\">\n" +
     "    <md-progress-circular value=\"{{browser.determinateValue}}\" md-mode=\"determinate\"></md-progress-circular>\n" +
     "  </div>\n" +
     "  \n" +
@@ -16,20 +16,8 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <div class=\"text-below\">Or use one of the buttons above.</div>\n" +
     "  </div>\n" +
     "\n" +
-    "  <md-content layout-padding ng-show=\"browser.data\">\n" +
-    "    <md-grid-list md-row-height=\"4:3\" md-cols-sm=\"2\" md-cols-gt-sm=\"3\" md-cols-md=\"4\" md-cols-gt-md=\"5\" md-cols-lg=\"6\" md-cols-gt-lg=\"8\" md-gutter-sm=\"8px\" md-gutter-md=\"12px\" md-gutter-lg=\"16px\" md-gutter-gt-lg=\"16px\">\n" +
-    "\n" +
-    "      <md-grid-tile md-rowspan=\"2\" ng-repeat=\"item in browser.data track by item._id\" ng-click=\"browser.playItem(item)\">\n" +
-    "        <div style=\"display: inline-block; height: 100%; width: 100%\">\n" +
-    "          <img ng-src=\"item.poster\" width=\"100%\"/>\n" +
-    "          <div class=\"info\">\n" +
-    "            <h3 class=\"item-title\">{{ item.title }}</h3>\n" +
-    "          </div>\n" +
-    "        </div>\n" +
-    "      </md-grid-tile>\n" +
-    "\n" +
-    "    </md-grid-list>\n" +
-    "\n" +
+    "  <md-content layout-padding style=\"overflow: hidden;\">\n" +
+    "    <app-files></app-files>\n" +
     "  </md-content>\n" +
     "</md-content>"
   );
@@ -109,7 +97,7 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('partials/player.html',
     "\n" +
-    "<div chimerangular wc-player-ready=\"chimera.onPlayerReady($API)\"\n" +
+    "<div chimerangular wc-player-ready=\"chimera.onPlayerReady($API)\" style=\"height: 100%\"\n" +
     "     wc-config=\"chimera.config\"\n" +
     "     wc-complete=\"chimera.onCompleteVideo()\"\n" +
     "     wc-error=\"chimera.onError($event)\"\n" +
@@ -121,16 +109,13 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "     wc-auto-play=\"chimera.config.autoPlay\"\n" +
     "     wc-plays-inline=\"chimera.config.playsInline\">\n" +
     "\n" +
-    "    <wc-media ng-show=\"chimera.player.torrentLink\" wc-src=\"chimera.torrent.files\"\n" +
+    "    <wc-media wc-src=\"chimera.torrent.files\"\n" +
     "              wc-loop=\"chimera.config.loop\"\n" +
     "              wc-preload=\"chimera.config.preload\">\n" +
     "    </wc-media>\n" +
     "\n" +
-    "    <wc-poster ng-hide=\"chimera.player.canplay\" ng-if=\"chimera.config.poster\" poster=\"chimera.config.poster\"></wc-poster>\n" +
-    "    <wc-detail ng-hide=\"chimera.player.torrentLink\" player=\"chimera.player\" torrent=\"chimera.torrent\" config=\"chimera.config\"></wc-detail>\n" +
-    "\n" +
-    "    <div ng-if=\"chimera.player.torrentLink\" ng-init=\"wcAutohideClass = { value: 'hide-animation' }\">\n" +
-    "        <wc-top-controls ng-show=\"chimera.config.controls && chimera.player.canplay\" wc-autohide=\"chimera.config.autoHide\" wc-autohide-time=\"chimera.config.autoHideTime\" wc-autohide-class=\"wcAutohideClass.value\">\n" +
+    "    <div ng-init=\"wcAutohideClass = { value: 'hide-animation' }\">\n" +
+    "        <wc-top-controls wc-autohide=\"chimera.config.autoHide\" wc-autohide-time=\"chimera.config.autoHideTime\" wc-autohide-class=\"wcAutohideClass.value\">\n" +
     "            <wc-close-button></wc-close-button>\n" +
     "        </wc-top-controls>\n" +
     "\n" +
@@ -169,11 +154,17 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "    <span class=\"flex\"></span>\n" +
     "    \n" +
     "    <div class=\"md-toolbar-tools md-toolbar-tools-bottom\">\n" +
-    "      <md-button class=\"md-icon-button\" ng-click=\"toggleSidenav()\" hide-gt-md aria-label=\"{{ toolbar.title }}\">\n" +
-    "        <md-icon md-font-set=\"material-icons\">menu</md-icon>\n" +
+    "      <md-button class=\"md-icon-button\" ng-click=\"selectFolder()\" hide-gt-md aria-label=\"{{ toolbar.title }}\">\n" +
+    "        <md-icon md-font-set=\"material-icons\">folder_open</md-icon>\n" +
     "      </md-button>\n" +
     "\n" +
-    "      <h3>{{ toolbar.title }}</h3>\n" +
+    "      <div class=\"breadcrumbs\" ng-repeat=\"breadcrumb in files.breadcrumbsUrls track by $index\">\n" +
+    "        <div href=\"files\" ng-init=\"crumb = breadcrumb.split('/')\" ng-click=\"files.selectBreadcrumb($index)\">\n" +
+    "          <span class=\"folderName\">\n" +
+    "            {{crumb[crumb.length-1]}}<i ng-if=\"!$last\" style=\"padding: 0px 5px;\">/</i>\n" +
+    "          </span>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
     "\n" +
     "      <span flex></span>\n" +
     "      \n" +

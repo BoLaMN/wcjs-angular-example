@@ -2,11 +2,17 @@
     <span class="flex"></span>
     
     <div class="md-toolbar-tools md-toolbar-tools-bottom">
-      <md-button class="md-icon-button" ng-click="toggleSidenav()" hide-gt-md aria-label="{{ toolbar.title }}">
-        <md-icon md-font-set="material-icons">menu</md-icon>
+      <md-button class="md-icon-button" ng-click="selectFolder()" hide-gt-md aria-label="{{ toolbar.title }}">
+        <md-icon md-font-set="material-icons">folder_open</md-icon>
       </md-button>
 
-      <h3>{{ toolbar.title }}</h3>
+      <div class="breadcrumbs" ng-repeat="breadcrumb in files.breadcrumbsUrls track by $index">
+        <div href="files" ng-init="crumb = breadcrumb.split('/')" ng-click="files.selectBreadcrumb($index)">
+          <span class="folderName">
+            {{crumb[crumb.length-1]}}<i ng-if="!$last" style="padding: 0px 5px;">/</i>
+          </span>
+        </div>
+      </div>
 
       <span flex></span>
       

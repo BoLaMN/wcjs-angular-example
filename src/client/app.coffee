@@ -21,12 +21,25 @@ angular.module 'app', [
 
   $compileProvider.debugInfoEnabled true
 
+  avaliablePalettes = [ 'blue-grey', 'grey', 'brown', 'deep-orange', 'orange', 'amber', 'yellow', 'lime', 'light-green', 'green', 'teal', 'cyan', 'light-blue', 'blue', 'indigo', 'deep-purple', 'purple', 'pink', 'red' ]
+  activePaletteIndex = Math.floor Math.random() * 18
+  activeAccentPaletteIndex = Math.floor Math.random() * 18
+
   $mdThemingProvider
     .theme 'default'
-    .primaryPalette 'indigo'
-    .accentPalette 'blue'
+    .primaryPalette avaliablePalettes[activePaletteIndex], default: '500'
+    .accentPalette avaliablePalettes[activeAccentPaletteIndex], default: '600'
+    .backgroundPalette 'grey', default: '900'
 
   return 
+
+.run ($rootScope, $mdColorPalette) ->
+
+  $rootScope.getMaterialColor = (base, shade) ->
+    color = $mdColorPalette[base][shade].value
+    'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')'
+
+  return
 
 .directive 'appPlayer', ->
   restrict: 'E'
@@ -54,3 +67,26 @@ angular.module 'app', [
   #controller: 'BrowserCtrl as browser'
 
 .constant 'ipc', require 'ipc'
+
+.filter 'itemsFilter', ->
+  (itemsLength) ->
+    if itemsLength == 1
+      itemsLength += ' item'
+    else if itemsLength > 1
+      itemsLength += ' items'
+    else
+      itemsLength = 'Empty'
+
+    itemsLength
+
+.filter 'bytesToSize', ->
+  (bytes) ->
+    sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'] 
+
+    if bytes == 0
+      return '0 Bytes'
+    
+    i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
+    
+    Math.round(bytes / 1024 ** i, 2) + ' ' + sizes[i]
+

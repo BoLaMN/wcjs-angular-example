@@ -1,5 +1,5 @@
 
-<div chimerangular wc-player-ready="chimera.onPlayerReady($API)"
+<div chimerangular wc-player-ready="chimera.onPlayerReady($API)" style="height: 100%"
      wc-config="chimera.config"
      wc-complete="chimera.onCompleteVideo()"
      wc-error="chimera.onError($event)"
@@ -11,16 +11,13 @@
      wc-auto-play="chimera.config.autoPlay"
      wc-plays-inline="chimera.config.playsInline">
 
-    <wc-media ng-show="chimera.player.torrentLink" wc-src="chimera.torrent.files"
+    <wc-media wc-src="chimera.torrent.files"
               wc-loop="chimera.config.loop"
               wc-preload="chimera.config.preload">
     </wc-media>
 
-    <wc-poster ng-hide="chimera.player.canplay" ng-if="chimera.config.poster" poster="chimera.config.poster"></wc-poster>
-    <wc-detail ng-hide="chimera.player.torrentLink" player="chimera.player" torrent="chimera.torrent" config="chimera.config"></wc-detail>
-
-    <div ng-if="chimera.player.torrentLink" ng-init="wcAutohideClass = { value: 'hide-animation' }">
-        <wc-top-controls ng-show="chimera.config.controls && chimera.player.canplay" wc-autohide="chimera.config.autoHide" wc-autohide-time="chimera.config.autoHideTime" wc-autohide-class="wcAutohideClass.value">
+    <div ng-init="wcAutohideClass = { value: 'hide-animation' }">
+        <wc-top-controls wc-autohide="chimera.config.autoHide" wc-autohide-time="chimera.config.autoHideTime" wc-autohide-class="wcAutohideClass.value">
             <wc-close-button></wc-close-button>
         </wc-top-controls>
 
