@@ -1,3 +1,6 @@
+app-player {
+  z-index: 20;
+}
 app-files .breadcrumbs a:hover {
   text-decoration: underline;
 }
@@ -342,6 +345,10 @@ app-files .breadcrumbs a:link,
 chimerangular,
 [chimerangular] {
   background-color: #000 !important;
+}
+body,
+html {
+  background: transparent;
 }
 app-header {
   z-index: 10;

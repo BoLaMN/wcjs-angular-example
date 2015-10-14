@@ -44,10 +44,14 @@ angular.module 'app', [
 .directive 'appPlayer', ->
   restrict: 'E'
   templateUrl: 'partials/player.html'
-  controller: 'playerCtrl as chimera'
+  controller: 'playerCtrl as player'
 
 .controller 'playerCtrl', ($scope, playerConfig) ->
   vm = this
+
+  vm.selectMediaFile = (file) ->
+    vm.config.sources.push file: 'file://' + file.path, title: file.name, subs: []
+    vm.show = true
 
   vm.config = playerConfig.config
 

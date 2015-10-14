@@ -140,7 +140,7 @@ angular.module 'app'
         </div>
       </li>
 
-      <li app-morph-overlay="{ 'closeEl': '.close', 'templateUrl': 'partials/player.html' }" ng-repeat="file in files.files track by file.path">
+      <li ng-click="player.selectMediaFile(file);" ng-repeat="file in files.files track by file.path">
         <div title="{{ file.path }}" class="files">
           <span class="icon file f-{{ file.ext }}">
             {{ file.ext }}

@@ -97,29 +97,27 @@ angular.module('ng').run(['$templateCache', function($templateCache) {
 
   $templateCache.put('partials/player.html',
     "\n" +
-    "<div chimerangular wc-player-ready=\"chimera.onPlayerReady($API)\" style=\"height: 100%\"\n" +
-    "     wc-config=\"chimera.config\"\n" +
-    "     wc-complete=\"chimera.onCompleteVideo()\"\n" +
-    "     wc-error=\"chimera.onError($event)\"\n" +
-    "     wc-stop=\"chimera.player = null\"\n" +
-    "     wc-can-play=\"chimera.player.canplay = true\"\n" +
-    "     wc-update-time=\"chimera.onUpdateTime($currentTime, $duration)\"\n" +
-    "     wc-update-volume=\"chimera.onUpdateVolume($volume)\"\n" +
-    "     wc-update-state=\"chimera.onUpdateState($state)\"\n" +
-    "     wc-auto-play=\"chimera.config.autoPlay\"\n" +
-    "     wc-plays-inline=\"chimera.config.playsInline\">\n" +
+    "<div chimerangular wc-player-ready=\"player.onPlayerReady($API)\" style=\"height: 100%\"\n" +
+    "     wc-config=\"player.config\"\n" +
+    "     wc-complete=\"player.onCompleteVideo()\"\n" +
+    "     wc-error=\"player.onError($event)\"\n" +
+    "     wc-stop=\"player.show = false\"\n" +
+    "     wc-can-play=\"player.canplay = true\"\n" +
+    "     wc-update-time=\"player.onUpdateTime($currentTime, $duration)\"\n" +
+    "     wc-update-volume=\"player.onUpdateVolume($volume)\"\n" +
+    "     wc-update-state=\"player.onUpdateState($state)\"\n" +
+    "     wc-auto-play=\"player.config.autoPlay\">\n" +
     "\n" +
-    "    <wc-media wc-src=\"chimera.torrent.files\"\n" +
-    "              wc-loop=\"chimera.config.loop\"\n" +
-    "              wc-preload=\"chimera.config.preload\">\n" +
+    "    <wc-media wc-loop=\"player.config.loop\"\n" +
+    "              wc-preload=\"player.config.preload\">\n" +
     "    </wc-media>\n" +
     "\n" +
     "    <div ng-init=\"wcAutohideClass = { value: 'hide-animation' }\">\n" +
-    "        <wc-top-controls wc-autohide=\"chimera.config.autoHide\" wc-autohide-time=\"chimera.config.autoHideTime\" wc-autohide-class=\"wcAutohideClass.value\">\n" +
+    "        <wc-top-controls wc-autohide=\"player.config.autoHide\" wc-autohide-time=\"player.config.autoHideTime\" wc-autohide-class=\"wcAutohideClass.value\">\n" +
     "            <wc-close-button></wc-close-button>\n" +
     "        </wc-top-controls>\n" +
     "\n" +
-    "        <wc-bottom-controls ng-show=\"chimera.config.controls && chimera.player.canplay\" wc-autohide=\"chimera.config.autoHide\" wc-autohide-time=\"chimera.config.autoHideTime\" wc-autohide-class=\"wcAutohideClass.value\">\n" +
+    "        <wc-bottom-controls ng-show=\"player.canplay\" wc-autohide=\"player.config.autoHide\" wc-autohide-time=\"player.config.autoHideTime\" wc-autohide-class=\"wcAutohideClass.value\">\n" +
     "            <wc-play-pause-button></wc-play-pause-button>\n" +
     "            <wc-time-display>{{ currentTime | formatTime }}</wc-time-display>\n" +
     "            \n" +
@@ -130,7 +128,7 @@ angular.module('ng').run(['$templateCache', function($templateCache) {
     "            <wc-time-display>{{ timeLeft | formatTime }}</wc-time-display>\n" +
     "            <wc-playback-button></wc-playback-button>\n" +
     "            \n" +
-    "            <wc-subtitle subtitles=\"chimera.config.tracks\" current-subtitle=\"chimera.config.track\"></wc-subtitle>\n" +
+    "            <wc-subtitle subtitles=\"player.config.tracks\" current-subtitle=\"player.config.track\"></wc-subtitle>\n" +
     "            \n" +
     "            <wc-volume>\n" +
     "                <wc-mute-button></wc-mute-button>\n" +
@@ -140,10 +138,10 @@ angular.module('ng').run(['$templateCache', function($templateCache) {
     "            <wc-fullscreen-button></wc-fullscreen-button>\n" +
     "        </wc-bottom-controls>\n" +
     "\n" +
-    "        <wc-next-video wc-next=\"chimera.config.next\" wc-time=\"3000\"></wc-next-video>\n" +
-    "        <wc-torrent-info ng-hide=\"chimera.config.controls && chimera.player.canplay\" wc-torrent=\"chimera.torrent\" wc-player=\"chimera.player\"></wc-torrent-info>\n" +
-    "        <wc-buffering ng-show=\"chimera.player.canplay\"></wc-buffering>\n" +
-    "        <wc-overlay-play ng-if=\"chimera.config.controls && chimera.player.canplay\"></wc-overlay-play>\n" +
+    "        <wc-next-video wc-next=\"player.config.next\" wc-time=\"3000\"></wc-next-video>\n" +
+    "        <wc-torrent-info ng-hide=\"player.canplay\" wc-torrent=\"player.torrent\" wc-player=\"player.player\"></wc-torrent-info>\n" +
+    "        <wc-buffering ng-show=\"player.canplay\"></wc-buffering>\n" +
+    "        <wc-overlay-play ng-if=\"player.canplay\"></wc-overlay-play>\n" +
     "    </div>\n" +
     "</div>"
   );

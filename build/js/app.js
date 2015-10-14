@@ -27,11 +27,19 @@ angular.module('app', ['ngSanitize', 'ngMaterial', 'ngAnimate', 'ngAria', 'wcjs-
   return {
     restrict: 'E',
     templateUrl: 'partials/player.html',
-    controller: 'playerCtrl as chimera'
+    controller: 'playerCtrl as player'
   };
 }).controller('playerCtrl', ["$scope", "playerConfig", function($scope, playerConfig) {
   var vm;
   vm = this;
+  vm.selectMediaFile = function(file) {
+    vm.config.sources.push({
+      file: 'file://' + file.path,
+      title: file.name,
+      subs: []
+    });
+    return vm.show = true;
+  };
   vm.config = playerConfig.config;
   $scope.$watch('chimera.torrent.ready', function(readyState) {
     return vm.config.controls = readyState;
@@ -177,6 +185,9 @@ angular.module('app').constant('fs', require('fs')).constant('path', require('pa
     }
     return path;
   };
+  vm.selectMediaFile = function(file) {
+    return console.log(file);
+  };
   vm.handleDrop = function($files, $event) {
     return console.log($files, $event);
   };
@@ -240,7 +251,7 @@ angular.module('app').constant('fs', require('fs')).constant('path', require('pa
 }]).directive('appFiles', function() {
   return {
     restrict: 'E',
-    template: '<ul class="app-grid">\n  <li md-ink-ripple md-colspan="2" ng-repeat="folder in files.folders track by folder.path" ng-click="files.openFolder(folder.path)">\n    <div title="{{ folder.path }}" class="folders">\n      <span class="icon folder" ng-class="{ \'full\': folder.items.length }"></span>\n\n      <span class="name">\n        {{ folder.name }}\n      </span> \n\n      <span class="details">\n        {{ folder.items.length | itemsFilter }}\n      </span>\n    </div>\n  </li>\n\n  <li app-morph-overlay="{ \'closeEl\': \'.close\', \'templateUrl\': \'partials/player.html\' }" ng-repeat="file in files.files track by file.path">\n    <div title="{{ file.path }}" class="files">\n      <span class="icon file f-{{ file.ext }}">\n        {{ file.ext }}\n      </span>\n\n      <span class="name">\n        {{ file.name }}\n      </span> \n      \n      <span class="details">\n        {{ file.size | bytesToSize }}\n      </span>\n    </div>\n  </li>\n</ul',
+    template: '<ul class="app-grid">\n  <li md-ink-ripple md-colspan="2" ng-repeat="folder in files.folders track by folder.path" ng-click="files.openFolder(folder.path)">\n    <div title="{{ folder.path }}" class="folders">\n      <span class="icon folder" ng-class="{ \'full\': folder.items.length }"></span>\n\n      <span class="name">\n        {{ folder.name }}\n      </span> \n\n      <span class="details">\n        {{ folder.items.length | itemsFilter }}\n      </span>\n    </div>\n  </li>\n\n  <li ng-click="player.selectMediaFile(file);" ng-repeat="file in files.files track by file.path">\n    <div title="{{ file.path }}" class="files">\n      <span class="icon file f-{{ file.ext }}">\n        {{ file.ext }}\n      </span>\n\n      <span class="name">\n        {{ file.name }}\n      </span> \n      \n      <span class="details">\n        {{ file.size | bytesToSize }}\n      </span>\n    </div>\n  </li>\n</ul',
     controller: 'filesCtrl as files'
   };
 });
@@ -288,238 +299,6 @@ angular.module('app').constant('titleButtons', {
   vm.fullscreen = function() {
     ipc.send('toggleFullscreen');
     return vm.state.fullscreen = true;
-  };
-}]);
-
-'use strict';
-
-angular.module('app').factory('animationAssist', function() {
-  var defaultStyles;
-  defaultStyles = {
-    wrapper: {
-      'position': 'fixed',
-      'z-index': '900',
-      'opacity': '0',
-      'margin': '0',
-      'pointer-events': 'none',
-      '-webkit-transition': 'opacity 0.3s 0.5s, width 0.4s 0.1s, height 0.4s 0.1s, top 0.4s 0.1s, left 0.4s 0.1s, margin 0.4s 0.1s',
-      'transition': 'opacity 0.3s 0.5s, width 0.4s 0.1s, height 0.4s 0.1s, top 0.4s 0.1s, left 0.4s 0.1s, margin 0.4s 0.1s'
-    },
-    content: {
-      'transition': 'opacity 0.3s 0.3s ease',
-      '-webkit-transition': 'opacity 0.3s 0.3s ease',
-      'height': '0',
-      'opacity': '0'
-    },
-    morphable: {
-      'z-index': '1000',
-      'outline': 'none'
-    },
-    fade: {
-      'visibility': 'hidden',
-      'opacity': '0',
-      'position': 'fixed',
-      'top': '0',
-      'left': '0',
-      'z-index': '800',
-      'width': '100%',
-      'height': '100%',
-      'background': 'rgba(0,0,0,0.5)',
-      '-webkit-transition': 'opacity 0.5s',
-      'transition': 'opacity 0.5s'
-    }
-  };
-  return {
-    setBoundingRect: function(element, positioning, callback) {
-      element.css({
-        'top': positioning.top + 'px',
-        'left': positioning.left + 'px',
-        'width': positioning.width + 'px',
-        'height': positioning.height + 'px'
-      });
-      if (typeof callback === 'function') {
-        callback(element);
-      }
-    },
-    applyDefaultStyles: function(element, elementName) {
-      if (defaultStyles[elementName]) {
-        element.css(defaultStyles[elementName]);
-      }
-    }
-  };
-}).factory('Morph', ["Overlay", "animationAssist", function(Overlay, animationAssist) {
-  return function(elements, settings) {
-    var MorphableBoundingRect;
-    MorphableBoundingRect = settings.MorphableBoundingRect;
-    animationAssist.setBoundingRect(elements.wrapper, MorphableBoundingRect);
-    angular.forEach(elements, function(element, elementName) {
-      animationAssist.applyDefaultStyles(element, elementName);
-    });
-    return Overlay(elements, settings);
-  };
-}]).factory('OverlayEnter', function() {
-  return {
-    wrapper: function(element, settings) {
-      element.css({
-        'z-index': 1900,
-        'opacity': 1,
-        'visibility': 'visible',
-        'pointer-events': 'auto',
-        'top': '0',
-        'left': '0',
-        'width': '100%',
-        'height': '100%',
-        '-webkit-transition': 'width 0.4s 0.1s, height 0.4s 0.1s, top 0.4s 0.1s, left 0.4s 0.1s, margin 0.4s 0.1s',
-        'transition': 'width 0.4s 0.1s, height 0.4s 0.1s, top 0.4s 0.1s, left 0.4s 0.1s, margin 0.4s 0.1s'
-      });
-      if (settings.scroll !== false) {
-        setTimeout((function() {
-          element.css({
-            'overflow-y': 'scroll'
-          });
-        }), 500);
-      }
-    },
-    content: function(element, settings) {
-      element.css({
-        'height': null,
-        'transition': 'opacity 0.3s 0.5s ease',
-        'visibility': 'visible',
-        'opacity': '1'
-      });
-    },
-    morphable: function(element, settings) {
-      element.css({
-        'z-index': 2000,
-        'opacity': 0,
-        '-webkit-transition': 'opacity 0.1s',
-        'transition': 'opacity 0.1s'
-      });
-    }
-  };
-}).factory('OverlayExit', function() {
-  return {
-    wrapper: function(element, settings) {
-      var MorphableBoundingRect;
-      MorphableBoundingRect = settings.MorphableBoundingRect;
-      setTimeout((function() {
-        element.css({
-          'overflow': 'hidden',
-          'position': 'fixed',
-          'z-index': '900',
-          'opacity': '0',
-          'margin': 0,
-          'top': MorphableBoundingRect.top + 'px',
-          'left': MorphableBoundingRect.left + 'px',
-          'width': MorphableBoundingRect.width + 'px',
-          'height': MorphableBoundingRect.height + 'px',
-          'pointer-events': 'none',
-          '-webkit-transition': 'opacity 0.3s 0.5s, width 0.35s 0.1s, height 0.35s 0.1s, top 0.35s 0.1s, left 0.35s 0.1s, margin 0.35s 0.1s',
-          'transition': 'opacity 0.3s 0.5s, width 0.35s 0.1s, height 0.35s 0.1s, top 0.35s 0.1s, left 0.35s 0.1s, margin 0.35s 0.1s'
-        });
-      }), 100);
-    },
-    content: function(element, settings) {
-      element.css({
-        'transition': 'opacity 0.22s',
-        '-webkit-transition': 'opacity 0.22s',
-        'height': '0',
-        'opacity': '0'
-      });
-      setTimeout((function() {
-        element.css({
-          'visibility': 'hidden'
-        });
-      }), 70);
-    },
-    morphable: function(element, settings) {
-      element.css({
-        'z-index': 900,
-        'opacity': 1,
-        '-webkit-transition': 'opacity 0.1s 0.3s',
-        'transition': 'opacity 0.1s 0.3s'
-      });
-    }
-  };
-}).factory('Overlay', ["OverlayEnter", "OverlayExit", function(OverlayEnter, OverlayExit) {
-  return function(elements, settings) {
-    return {
-      toggle: function(isMorphed) {
-        if (!isMorphed) {
-          elements.wrapper.css({
-            transition: 'none',
-            top: settings.MorphableBoundingRect.top + 'px',
-            left: settings.MorphableBoundingRect.left + 'px'
-          });
-          setTimeout((function() {
-            angular.forEach(elements, (function(_this) {
-              return function(element, elementName) {
-                if (OverlayEnter[elementName]) {
-                  OverlayEnter[elementName](element, settings);
-                }
-              };
-            })(this));
-          }), 25);
-        } else {
-          angular.forEach(elements, (function(_this) {
-            return function(element, elementName) {
-              if (OverlayExit[elementName]) {
-                OverlayExit[elementName](element, settings);
-              }
-            };
-          })(this));
-        }
-        return !isMorphed;
-      }
-    };
-  };
-}]).directive('appMorphOverlay', ["$compile", "Morph", "$templateCache", "$parse", function($compile, Morph, $templateCache, $parse) {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      var compile, initMorphable, isMorphed, settings, wrapper;
-      wrapper = angular.element('<div></div>').css('visibility', 'hidden');
-      settings = $parse(attrs.appMorphOverlay);
-      settings = settings();
-      isMorphed = false;
-      compile = function(data) {
-        return $compile(data)(scope);
-      };
-      initMorphable = function(content) {
-        var closeEl, elements, overlay;
-        closeEl = angular.element(content[0].querySelector(settings.closeEl));
-        elements = {
-          morphable: element,
-          wrapper: wrapper,
-          content: content
-        };
-        wrapper.append(content);
-        element.after(wrapper);
-        wrapper.css('background', getComputedStyle(content[0]).backgroundColor);
-        settings.MorphableBoundingRect = element[0].getBoundingClientRect();
-        settings.ContentBoundingRect = content[0].getBoundingClientRect();
-        overlay = new Morph(elements, settings);
-        element.bind('click', function() {
-          settings.MorphableBoundingRect = element[0].getBoundingClientRect();
-          isMorphed = overlay.toggle(isMorphed);
-        });
-        if (closeEl) {
-          closeEl.bind('click', function(event) {
-            settings.MorphableBoundingRect = element[0].getBoundingClientRect();
-            isMorphed = overlay.toggle(isMorphed);
-          });
-        }
-        scope.$on('$destroy', function() {
-          element.unbind('click');
-          closeEl.unbind('click');
-        });
-      };
-      if (settings.template) {
-        initMorphable(compile(settings.template));
-      } else if (settings.templateUrl) {
-        initMorphable(compile($templateCache.get(settings.templateUrl)));
-      }
-    }
   };
 }]);
 

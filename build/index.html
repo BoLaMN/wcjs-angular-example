@@ -12,12 +12,12 @@
   <body class="ng-cloak" layout="column" app-file-drop="files.handleDrop($files, $event)">
     <app-header></app-header>
 
-    <section flex layout="column">
+    <section flex layout="column" ng-hide="player.show">
       <app-toolbar layout="row"></app-toolbar>
       <app-container flex layout="column"></appp-container>
     </section>
     
-    <app-player ng-show="chimera.config.id"></app-player>
+    <app-player ng-show="player.show"></app-player>
 
   <!-- App -->
   <script src="js/angular.js"></script>
