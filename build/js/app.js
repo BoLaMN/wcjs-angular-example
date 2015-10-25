@@ -1,10 +1,13 @@
 'use strict';
 angular.module('app', ['ngSanitize', 'ngMaterial', 'ngAnimate', 'ngAria', 'wcjs-angular']).config(["$compileProvider", "$httpProvider", "$mdThemingProvider", "wcjsRendererProvider", function($compileProvider, $httpProvider, $mdThemingProvider, wcjsRendererProvider) {
-  var activeAccentPaletteIndex, activePaletteIndex, avaliablePalettes, platform;
-  platform = process.platform;
-  if (platform === 'darwin') {
-    platform = 'osx';
-  }
+  var activeAccentPaletteIndex, activePaletteIndex, avaliablePalettes, platform, platforms;
+  platforms = {
+    win32: 'win',
+    darwin: 'osx',
+    linux32: 'linux',
+    linux64: 'linux'
+  };
+  platform = platforms[process.platform];
   wcjsRendererProvider.setAddonPath('../wcjs/' + platform);
   $compileProvider.debugInfoEnabled(true);
   avaliablePalettes = ['blue-grey', 'grey', 'brown', 'deep-orange', 'orange', 'amber', 'yellow', 'lime', 'light-green', 'green', 'teal', 'cyan', 'light-blue', 'blue', 'indigo', 'deep-purple', 'purple', 'pink', 'red'];
@@ -184,9 +187,6 @@ angular.module('app').constant('fs', require('fs')).constant('path', require('pa
       i++;
     }
     return path;
-  };
-  vm.selectMediaFile = function(file) {
-    return console.log(file);
   };
   vm.handleDrop = function($files, $event) {
     return console.log($files, $event);

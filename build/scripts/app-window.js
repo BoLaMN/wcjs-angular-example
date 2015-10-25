@@ -1,5 +1,5 @@
 (function() {
-  var AppWindow, EventEmitter, ipc, shell, window,
+  var AppWindow, EventEmitter, app, ipc, shell, window,
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
@@ -8,6 +8,8 @@
   window = require('browser-window');
 
   ipc = require('ipc');
+
+  app = require('app');
 
   EventEmitter = require('events').EventEmitter;
 
@@ -65,7 +67,7 @@
       });
       ipc.on('userdir', (function(_this) {
         return function(evt, arg) {
-          return evt.returnValue = require('app').getPath('home');
+          return evt.returnValue = require('app').getPath('userDesktop');
         };
       })(this));
       ipc.on('focus', (function(_this) {

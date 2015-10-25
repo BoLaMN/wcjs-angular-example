@@ -1,6 +1,7 @@
 shell  = require 'shell'
 window = require 'browser-window'
 ipc    = require 'ipc'
+app    = require 'app'
 
 { EventEmitter } = require 'events'
 
@@ -18,7 +19,7 @@ class AppWindow extends EventEmitter
       icon: 'assets/images/icon.png'
       transparent: true
       center: true
-      'web-preferences': 
+      'web-preferences':
         'webaudio': true,
         'web-security': false,
         'use-content-size': true,
@@ -53,7 +54,7 @@ class AppWindow extends EventEmitter
       return
 
     ipc.on 'userdir', (evt, arg) =>
-      evt.returnValue = require('app').getPath 'home'
+      evt.returnValue = require('app').getPath 'userDesktop'
 
     ipc.on 'focus', =>
       @window.focus()
@@ -70,13 +71,13 @@ class AppWindow extends EventEmitter
     ipc.on 'resize', (e, size) ->
       if @window.isMaximized()
         return
-      
+
       width = @window.getSize()[0]
       height = width / size.ratio | 0
-      
+
       @window.setSize width, height
 
-      return 
+      return
 
     ipc.on 'enter-full-screen', =>
       @window.setFullScreen true

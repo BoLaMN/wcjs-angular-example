@@ -12,12 +12,11 @@ angular.module 'app', [
 ]
 
 .config ($compileProvider, $httpProvider, $mdThemingProvider, wcjsRendererProvider) ->
-  platform = process.platform
+  platforms = win32: 'win', darwin: 'osx', linux32: 'linux', linux64: 'linux'
 
-  if platform is 'darwin'
-    platform = 'osx'
+  platform = platforms[process.platform]
 
-  wcjsRendererProvider.setAddonPath('../wcjs/' + platform)
+  wcjsRendererProvider.setAddonPath '../wcjs/' + platform
 
   $compileProvider.debugInfoEnabled true
 
